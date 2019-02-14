@@ -1,0 +1,38 @@
+/* BOOTSTRAP */
+.form-group input.e2.e2-editable {
+    width: calc(100% - 40px);
+    display: inline-flex;
+}
+
+.form-group input.e2.e2-editable+span.e2-action {
+    margin-right: 10px;
+    display: contents;
+
+}
+
+.form-group input.e2.e2-editable+span.e2-action .e2-icon {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.form-group input.e2.e2-editable.e2-editable-on {
+    width: calc(100% - 56px);
+}
+
+/* MATERIALIZE */
+.input-field input.e2.e2-editable {
+    width: calc(100% - 40px);
+}
+
+.input-field input.e2.e2-editable+span.e2-action {
+    margin-right: 10px;
+}
+
+.input-field input.e2.e2-editable+span.e2-action .e2-icon {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.input-field input.e2.e2-editable.e2-editable-on {
+    width: calc(100% - 56px);
+}
