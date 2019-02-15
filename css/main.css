@@ -15,7 +15,7 @@ body {
   padding: 15px;
   background: #fff;
   border-radius: 10px;
-  margin: 100px auto;
+  margin: 50px auto;
 }
 
 .text-h1 {
@@ -69,42 +69,39 @@ body {
   }
 }
 
-/* 
-.e2-loading {
-  -webkit-animation: loading 1s infinite;
-  -moz-animation: loading 1s infinite;
-  -ms-animation: loading 1s infinite;
-  animation: loading 1s infinite;
-  -webkit-animation-timing-function: linear;
-  -moz-animation-timing-function: linear;
-  -ms-animation-timing-function: linear;
-  animation-timing-function: linear
+
+.typewriter {
+  font-family: Courier, monospace;
+display: inline-block;
 }
 
-@keyframes loading {
-  /* 25% {
-    -moz-transform: rotate(36deg);
-    -ms-transform: rotate(36deg);
-    transform: rotate(36deg)
+.typewriter-text {
+  display: inline-block;
+  font-family: monospace;
+  overflow: hidden;
+  letter-spacing: 2px;
+  animation: typing 5s steps(56, end), blink .75s step-end infinite;
+  white-space: nowrap;
+  font-size: 25px;
+  font-weight: 700;
+  border-right: 3px solid orange;
+  box-sizing: border-box;
+}
+
+@keyframes typing {
+  from { 
+      width: 0% 
   }
-
-  50% {
-    -moz-transform: rotate(144deg);
-    -ms-transform: rotate(144deg);
-    transform: rotate(144deg)
+  to { 
+      width: 100% 
   }
-
-  75% {
-    -moz-transform: rotate(288deg);
-    -ms-transform: rotate(288deg);
-    transform: rotate(288deg)
-  } */
-/* 
-100% {
-  -moz-transform: rotate(360deg);
-  -ms-transform: rotate(360deg);
-  transform: rotate(360deg)
-}
 }
 
-*/
+@keyframes blink {
+  from, to { 
+      border-color: transparent 
+  }
+  50% { 
+      border-color: orange; 
+  }
+}
