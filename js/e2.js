@@ -8,13 +8,14 @@
         }
         this.class = myclass;
     }
+    var contentItem = null;
     editable.fn = editable.prototype = {
         e2: function (params) {
             var input = [] = document.getElementsByClassName(this.class);
-            for (var i = 0; i < input.length; i++) {
+            for (let i = 0; i < input.length; i++) {
+                enableEdit(input[i]);
                 input[i].addEventListener("focusin", onEdit);
                 input[i].addEventListener("focusout", offEdit);
-                enableEdit(input[i]);
                 // var label = getlabel(input[i].id)
                 // input[i].setAttribute('style', 'color: ' + params.icolor);
                 // label.setAttribute('style', 'color: ' + params.lcolor);
@@ -30,49 +31,44 @@
     window.editable = editable, window.$ = editable;
 })();
 
-function saveIcon() {
-    var onEditIconSave = document.createElement("i");
-    onEditIconSave.className = "far fa-save e2-icon";
-    return onEditIconSave;
-}
-
-function calcelIcon() {
-    var onEditIconCancel = document.createElement("i");
-    onEditIconCancel.className = "fas fa-times e2-icon";
-    return onEditIconCancel;
-}
-
 function enableEdit(item) {
     item.className += " e2-editable";
-    var parent = item.parentElement;
-    var divAction = document.createElement("span");
+    let parent = item.parentElement;
+    let divAction = document.createElement("span");
     divAction.className = "e2-action";
-    var editIcon = document.createElement("i");
-    editIcon.className = "far fa-edit e2-icon";
+    let editIcon = document.createElement("i");
+    editIcon.className = "far fa-edit e2-icon e2-edit";
     divAction.appendChild(editIcon);
-    parent.insertBefore(divAction, item);
+    parent.insertBefore(divAction, item.nextSibling);
+    editIcon.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        edit();
+    });
 }
 
 function onEdit() {
+    contentItem = this.value;
     this.className += " e2-editable-on";
-    var parent = this.parentElement;
+    let parent = this.parentElement;
     parent.getElementsByClassName("e2-action")[0].remove();
-    var divAction = document.createElement("span");
+    let divAction = document.createElement("span");
     divAction.className = "e2-action";
-    divAction.appendChild(saveIcon());
-    divAction.appendChild(calcelIcon());
-    parent.insertBefore(divAction, this);
+    divAction.appendChild(saveIcon(this));
+    divAction.appendChild(calcelIcon(this));
+    parent.insertBefore(divAction, this.nextSibling);
 }
 
 function offEdit() {
+    this.value = contentItem;
+    contentItem = null;
     this.classList.remove("e2-editable-on");
-    var parent = this.parentElement;
+    let parent = this.parentElement;
     parent.getElementsByClassName("e2-action")[0].remove();
     enableEdit(this);
 }
 
 function getlabel(input) {
-    var labels = document.getElementsByTagName("LABEL"),
+    let labels = document.getElementsByTagName("LABEL"),
         lookup = {},
         i, label;
 
@@ -83,4 +79,53 @@ function getlabel(input) {
         }
     }
     return lookup[input];
+}
+
+function saveIcon(item) {
+    let onEditIconSave = document.createElement("i");
+    onEditIconSave.className = "far fa-save e2-icon e2-save";
+    onEditIconSave.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        saveEdit(item);
+    });
+    return onEditIconSave;
+}
+
+function calcelIcon(item) {
+    let onEditIconCancel = document.createElement("i");
+    onEditIconCancel.className = "fas fa-times e2-icon e2-cancel";
+    onEditIconCancel.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        cancelEdit(item);
+    });
+    return onEditIconCancel;
+}
+
+function lodingIcon() {
+    let icon = document.createElement("i");
+    icon.className = "fas fa-spinner e2-loading";
+    return icon;
+}
+
+function edit() {
+    alert('edit');
+}
+
+function saveEdit(item) {
+    contentItem = null;
+    item.classList.remove("e2-editable-on");
+    let parent = item.parentElement;
+    parent.getElementsByClassName("e2-action")[0].remove();
+    let divAction = document.createElement("span");
+    divAction.className = "e2-action";
+    divAction.appendChild(lodingIcon());
+    parent.insertBefore(divAction, this.nextSibling);
+    item.removeEventListener("focusin", onEdit);
+    item.removeEventListener("focusout", offEdit);
+}
+
+function cancelEdit(item) {
+    alert('cancel');
+    console.log(item);
+
 }
