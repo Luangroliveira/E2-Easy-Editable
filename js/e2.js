@@ -103,7 +103,7 @@ function calcelIcon(item) {
 
 function lodingIcon() {
     let icon = document.createElement("i");
-    icon.className = "fas fa-spinner e2-loading";
+    icon.className = "fas fa-spinner e2-icon e2-loading";
     return icon;
 }
 
@@ -119,7 +119,7 @@ function saveEdit(item) {
     let divAction = document.createElement("span");
     divAction.className = "e2-action";
     divAction.appendChild(lodingIcon());
-    parent.insertBefore(divAction, this.nextSibling);
+    parent.insertBefore(divAction, item.nextSibling);
     item.removeEventListener("focusin", onEdit);
     item.removeEventListener("focusout", offEdit);
 }
