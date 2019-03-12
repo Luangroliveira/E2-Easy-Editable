@@ -14,8 +14,8 @@
             var input = [] = document.getElementsByClassName(this.class);
             for (let i = 0; i < input.length; i++) {
                 enableEdit(input[i]);
-                input[i].addEventListener("focusin", onEdit);
-                input[i].addEventListener("focusout", offEdit);
+                input[i].addEventListener("focusin", editOn);
+                input[i].addEventListener("focusout", editOff);
                 // var label = getlabel(input[i].id)
                 // input[i].setAttribute('style', 'color: ' + params.icolor);
                 // label.setAttribute('style', 'color: ' + params.lcolor);
@@ -32,7 +32,9 @@
 })();
 
 function enableEdit(item) {
-    item.className += " e2-editable";
+    if (!item.classList.contains("e2-editable")) {
+        item.className += " e2-editable";
+    }
     let parent = item.parentElement;
     let divAction = document.createElement("span");
     divAction.className = "e2-action";
@@ -42,11 +44,13 @@ function enableEdit(item) {
     parent.insertBefore(divAction, item.nextSibling);
     editIcon.addEventListener("mousedown", (event) => {
         event.preventDefault();
-        edit();
+        item.focus();
     });
+    item.addEventListener("focusin", editOn);
+    item.addEventListener("focusout", editOff);
 }
 
-function onEdit() {
+function editOn() {
     contentItem = this.value;
     this.className += " e2-editable-on";
     let parent = this.parentElement;
@@ -58,7 +62,7 @@ function onEdit() {
     parent.insertBefore(divAction, this.nextSibling);
 }
 
-function offEdit() {
+function editOff() {
     this.value = contentItem;
     contentItem = null;
     this.classList.remove("e2-editable-on");
@@ -68,10 +72,9 @@ function offEdit() {
 }
 
 function getlabel(input) {
-    let labels = document.getElementsByTagName("LABEL"),
+    let labels = document.getElementsByTagName("label"),
         lookup = {},
         i, label;
-
     for (i = 0; i < labels.length; i++) {
         label = labels[i];
         if (document.getElementById(label.htmlFor)) {
@@ -82,23 +85,23 @@ function getlabel(input) {
 }
 
 function saveIcon(item) {
-    let onEditIconSave = document.createElement("i");
-    onEditIconSave.className = "far fa-save e2-icon e2-save";
-    onEditIconSave.addEventListener("mousedown", (event) => {
+    let editOnIconSave = document.createElement("i");
+    editOnIconSave.className = "far fa-save e2-icon e2-save";
+    editOnIconSave.addEventListener("mousedown", (event) => {
         event.preventDefault();
         saveEdit(item);
     });
-    return onEditIconSave;
+    return editOnIconSave;
 }
 
 function calcelIcon(item) {
-    let onEditIconCancel = document.createElement("i");
-    onEditIconCancel.className = "fas fa-times e2-icon e2-cancel";
-    onEditIconCancel.addEventListener("mousedown", (event) => {
+    let editOnIconCancel = document.createElement("i");
+    editOnIconCancel.className = "fas fa-times e2-icon e2-cancel";
+    editOnIconCancel.addEventListener("mousedown", (event) => {
         event.preventDefault();
         cancelEdit(item);
     });
-    return onEditIconCancel;
+    return editOnIconCancel;
 }
 
 function lodingIcon() {
@@ -107,12 +110,8 @@ function lodingIcon() {
     return icon;
 }
 
-function edit() {
-    alert('edit');
-}
-
 function saveEdit(item) {
-    contentItem = null;
+    contentItem = item.value;
     item.classList.remove("e2-editable-on");
     let parent = item.parentElement;
     parent.getElementsByClassName("e2-action")[0].remove();
@@ -120,12 +119,21 @@ function saveEdit(item) {
     divAction.className = "e2-action";
     divAction.appendChild(lodingIcon());
     parent.insertBefore(divAction, item.nextSibling);
-    item.removeEventListener("focusin", onEdit);
-    item.removeEventListener("focusout", offEdit);
+    item.removeEventListener("focusin", editOn);
+    item.removeEventListener("focusout", editOff);
+    setTimeout(function () {
+        finishedEdit(item, divAction);
+    }, 3000);
+
+}
+
+function finishedEdit(item, div) {
+    div.remove();
+    item.classList.remove("e2-editable-on");
+    enableEdit(item);
+    item.blur();
 }
 
 function cancelEdit(item) {
-    alert('cancel');
-    console.log(item);
-
+    item.blur();
 }
